@@ -104,8 +104,8 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# Główny tytuł (tylko jeśli nie kliknięto NIE 5 razy)
-if st.session_state.no_clicks < 5:
+# Główny tytuł i przyciski (tylko jeśli nie kliknięto TAK i nie kliknięto NIE 5 razy)
+if not st.session_state.yes_clicked and st.session_state.no_clicks < 5:
     st.markdown("""
         <div class="title-container">
             <div class="title-text">
@@ -114,8 +114,8 @@ if st.session_state.no_clicks < 5:
         </div>
         """, unsafe_allow_html=True)
 
-# Wyświetlanie przycisków tylko jeśli nie kliknięto NIE 5 razy
-if st.session_state.no_clicks < 5:
+# Wyświetlanie przycisków tylko jeśli nie kliknięto TAK i nie kliknięto NIE 5 razy
+if not st.session_state.yes_clicked and st.session_state.no_clicks < 5:
     # Przyciskowy layout z lepszym wsparciem mobilnym
     col1, col2, col3 = st.columns([1, 2, 1])
     
@@ -188,22 +188,40 @@ if st.session_state.no_clicks < 5:
                 st.session_state.yes_clicked = False
                 st.rerun()
 
-# Wyświetlanie obrazów
-st.markdown("<br>", unsafe_allow_html=True)
-
+# Wyświetlanie głównej zawartości
 if st.session_state.yes_clicked:
-    st.markdown("""
-        <div style='text-align: center; color: white; font-size: 24px; font-weight: bold; margin-bottom: 20px;'>
-        ❤️ YESSSS! ❤️
-        </div>
-        """, unsafe_allow_html=True)
-    
-    # Sprawdzenie czy plik istnieje
-    yes_image_path = "yes_image.png"  # Zmień na właściwą ścieżkę
-    if os.path.exists(yes_image_path):
-        st.image(yes_image_path, use_container_width=True)
-    else:
-        st.info("📸 Tutaj pojawi się zdjęcie po kliknięciu TAK!\n\nUmieść plik 'yes_image.png' w katalogu projektu")
+    # GIF tańczącego kota w centrum, pokrywający miejsce tytułu i przycisków
+    # Centralne miejsce na GIF tańczącego kota
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        # Sprawdzenie czy plik GIF tańczącego kota istnieje
+        happy_cat_gif = "happy_cat.gif"  # GIF tańczącego szczęśliwego kota
+        if os.path.exists(happy_cat_gif):
+            st.image(happy_cat_gif, use_container_width=True)
+        else:
+            # Wyświetl placeholder z instrukcją dla GIF-a
+            st.markdown("""
+                <div style='text-align: center; background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,183,217,0.2)); 
+                           border-radius: 20px; padding: 40px; margin: 20px;
+                           box-shadow: 0 8px 32px rgba(0,0,0,0.3); backdrop-filter: blur(10px);'>
+                    <div style='font-size: 80px; margin-bottom: 20px; animation: dance 2s ease-in-out infinite;'>🐱</div>
+                    <div style='color: white; font-size: 20px; font-weight: bold; margin-bottom: 15px;'>
+                        🎊 Tutaj zatańczy szczęśliwy kot! 🎊
+                    </div>
+                    <div style='color: #ffb3d9; font-size: 16px; line-height: 1.4;'>
+                        Umieść plik 'happy_cat.gif' w katalogu projektu<br>
+                        aby zobaczyć tańczącego kota! 🕺
+                    </div>
+                </div>
+                <style>
+                @keyframes dance {
+                    0%, 100% { transform: rotate(0deg) scale(1); }
+                    25% { transform: rotate(5deg) scale(1.05); }
+                    50% { transform: rotate(0deg) scale(1.1); }
+                    75% { transform: rotate(-5deg) scale(1.05); }
+                }
+                </style>
+            """, unsafe_allow_html=True)
 
 elif st.session_state.no_clicks >= 5:
     # Sprawdzenie czy plik istnieje
